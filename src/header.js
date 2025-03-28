@@ -1,3 +1,5 @@
+import React from 'react';
+import './header.css'; // Adjust the path to the correct location of the CSS file 
 function Header() {
   return (
     <header>
@@ -5,3 +7,4 @@ function Header() {
     </header>
   );
 }
+export default Header;

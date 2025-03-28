@@ -1,3 +1,4 @@
+import './main.css'
 function Main () {
   return (
     <div>
@@ -5,3 +6,4 @@ function Main () {
     </div>
   )
 }
+export default Main;

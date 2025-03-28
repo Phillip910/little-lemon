@@ -1,4 +1,5 @@
-import Logo from './logo512.png';
+import './footer.css'; // Adjust the path to the correct location of the CSS file
+import Logo from './assets/LittleLemonlogo.png';
 
 function Footer() {
   return (

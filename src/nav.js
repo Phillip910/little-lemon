@@ -1,4 +1,5 @@
-import Logo from './logo192.png';
+import './nav.css';
+import Logo from './assets/LittleLemonlogo.png';
 import { Link } from 'react-router-dom';
 
 function Nav() {
