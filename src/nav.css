@@ -1,7 +1,7 @@
 /* Styles for the navigation bar */
 nav {
-    background-color: #333;
-    color: white;
+    background-color: #808000;
+    color: #808000;
     display: flex;
     justify-content: space-between;
     align-items: center;

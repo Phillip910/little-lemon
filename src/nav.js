@@ -1,29 +1,29 @@
+import React from 'react';
 import './nav.css';
-import Logo from './assets/LittleLemonlogo.png';
-import { Link } from 'react-router-dom';
+
 
 function Nav() {
   return (
     <nav>
-          <img src={Logo} alt="Logo" style={{ height: "50px" }} />
+          <img src="/LittleLemonlogo.png" alt="Logo" style={{ height: "50px" }} />
           <ul>
               <li>
-                  <Link to="/">Home</Link>
+                  <a href="/">Home</a>
               </li>
               <li>
-                  <Link to="/about">About</Link>
+                  <a href="/about">About</a>
               </li>
               <li>
-                  <Link to="/menu">Menu</Link>
+                  <a href="/menu">Menu</a>
               </li>
               <li>
-                <Link to ="/reservations">Reservations</Link>
+                <a href ="/reservations">Reservations</a>
               </li>
               <li>
-                <Link to ="/order-online">Order Online</Link>
+                <a href ="/order-online">Order Online</a>
               </li>
               <li>  
-                <Link to ="/login">login</Link>
+                <a href ="/login">login</a>
               </li>
           </ul>
     </nav>
