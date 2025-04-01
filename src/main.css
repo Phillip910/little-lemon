@@ -7,15 +7,6 @@ body {
     color: #333;
 }
 
-
-
-
-
-
-
-
-
-
 main {
     padding: 20px;
 }
@@ -24,6 +15,23 @@ section {
     margin-bottom: 40px;
 }
 
+img {
+    max-width: 25%;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+.specials {
+    display: flex;
+    
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 1;
+}
 section h2 {
     font-size: 2rem;
     margin-bottom: 10px;

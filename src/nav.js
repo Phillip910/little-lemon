@@ -1,5 +1,6 @@
 import React from 'react';
 import './nav.css';
+import { Link } from 'react-router-dom';
 
 
 function Nav() {
@@ -8,22 +9,22 @@ function Nav() {
           <img src="/LittleLemonlogo.png" alt="Logo" style={{ height: "50px" }} />
           <ul>
               <li>
-                  <a href="/">Home</a>
+                  <Link to="/">Home</Link>
               </li>
               <li>
-                  <a href="/about">About</a>
+                  <Link to="/about">About</Link>
               </li>
               <li>
-                  <a href="/menu">Menu</a>
+                  <Link to="/menu">Menu</Link>
               </li>
               <li>
-                <a href ="/reservations">Reservations</a>
+                <Link to ="/reservations">Reservations</Link>
               </li>
               <li>
-                <a href ="/order-online">Order Online</a>
+                <Link to ="/order-online">Order Online</Link>
               </li>
               <li>  
-                <a href ="/login">login</a>
+                <Link to ="/login">login</Link>
               </li>
           </ul>
     </nav>
