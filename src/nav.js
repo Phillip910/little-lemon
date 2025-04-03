@@ -1,6 +1,7 @@
 import React from 'react';
 import './nav.css';
 import { Link } from 'react-router-dom';
+import './BookingPage.js';
 
 
 function Nav() {
@@ -18,7 +19,7 @@ function Nav() {
                   <Link to="/menu">Menu</Link>
               </li>
               <li>
-                <Link to ="/reservations">Reservations</Link>
+                <Link to ="/BookingPage">Reservations</Link>
               </li>
               <li>
                 <Link to ="/order-online">Order Online</Link>
