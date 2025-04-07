@@ -18,6 +18,7 @@ function App() {
         <Route path="/BookingPage" element={<BookingPage/>} />
         <Route path="/order-online" element={<Main />} />
         <Route path="/login" element={<Main />} />
+        <Route path='/Confirmation' element={<Main />} />
       </Routes>
       <Footer />
       </Router>
