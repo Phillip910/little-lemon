@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { fetchAPI, submitAPI } from "./API"; // Assuming fetchAPI is defined in API.js
 import ConfirmBooking from "./ConfirmBooking"; // Import the ConfirmBooking component
 
-
 function BookingForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,6 +15,12 @@ function BookingForm() {
   const today = new Date(); // Create a Date object for today
 
   const fetchAvailableTimes = (selectedDate) => {
+    if (!selectedDate) {
+      console.warn("No date selected. Cannot fetch available times.");
+      setAvailableTimes([]);
+      return;
+    }
+
     try {
       const times = fetchAPI(new Date(selectedDate)); // Call the imported fetchAPI function
       setAvailableTimes(times);
@@ -33,9 +38,15 @@ function BookingForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!name || !email || !date || !time || !guests) {
+      console.error("All fields are required.");
+      return;
+    }
+
     const formData = { name, email, date, time, guests, occasion };
     const isSuccess = submitAPI(formData); // Call submitAPI with form data
-  
+
     if (isSuccess) {
       console.log("Form submitted successfully:", formData);
       setSubmittedData(formData); // Save the submitted form data
@@ -45,6 +56,7 @@ function BookingForm() {
       // Handle submission failure
     }
   };
+
   const resetBooking = () => {
     setIsConfirmed(false); // Reset the confirmation state
     setSubmittedData(null); // Clear the submitted data

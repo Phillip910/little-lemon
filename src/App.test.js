@@ -3,6 +3,8 @@ import App from './App';
 import BookingForm from './BookingForm';
 import userEvent from '@testing-library/user-event';
 import { timeAndDateReducer } from './reducers'; // Assuming the reducer is exported from a file named reducers.js
+import { fetchAPI, submitAPI } from './API'; // Assuming these functions are defined in API.js
+jest.mock('./API'); // Mock the API module
 
 test('Renders the BookingForm heading', () => {
     render(<BookingForm />);
@@ -60,8 +62,6 @@ describe("BookingForm Component - Date and Time Tests", () => {
   });
 
   test("prevents form submission without selecting a time", () => {
-      const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-  
       render(<BookingForm />);
       
       // Fill out other required fields
@@ -72,9 +72,115 @@ describe("BookingForm Component - Date and Time Tests", () => {
       // Attempt to submit without selecting time
       fireEvent.click(screen.getByRole("button", { name: /book now/i }));
       
-      // Assert no form submission
-      expect(consoleLogSpy).not.toHaveBeenCalled();
-  
-      consoleLogSpy.mockRestore();
+      // Assert validation message is displayed
+      expect(screen.getByText(/please select a time/i)).toBeInTheDocument();
   });
+});
+
+describe('fetchAPI Integration', () => {
+    test('fetchAPI is called with the correct date and updates available times', async function () {
+            const mockTimes = ['18:00', '19:00', '20:00'];
+            fetchAPI.mockReturnValue(mockTimes); // Mock the return value of fetchAPI
+
+            render(<BookingForm />);
+
+            const dateInput = screen.getByLabelText(/date/i);
+            fireEvent.change(dateInput, { target: { value: '2025-04-10' } });
+
+            expect(fetchAPI).toHaveBeenCalledWith(new Date('2025-04-10'));
+
+            const timeOptions = await screen.findAllByRole('option'); // Use findAllByRole to wait for async updates
+            expect(timeOptions).toHaveLength(4); // "Select a time" + 3 available times
+            expect(timeOptions[1]).toHaveTextContent('18:00');
+            expect(timeOptions[2]).toHaveTextContent('19:00');
+            expect(timeOptions[3]).toHaveTextContent('20:00');
+        });
+});
+
+describe('BookingForm - Updating Times', () => {
+    test('updates available times when a date is selected', async () => {
+        const mockTimes = ['12:00', '13:00', '14:00'];
+        fetchAPI.mockReturnValueOnce(mockTimes); // Ensure the mock is used only once for this test
+
+        render(<BookingForm />);
+
+        const dateInput = screen.getByLabelText(/date/i);
+        fireEvent.change(dateInput, { target: { value: '2025-04-10' } });
+
+        expect(fetchAPI).toHaveBeenCalledWith(new Date('2025-04-10'));
+
+        const timeOptions = await screen.findAllByRole('option'); // Await DOM updates
+        expect(timeOptions).toHaveLength(4); // "Select a time" + 3 available times
+        expect(timeOptions[1]).toHaveTextContent('12:00');
+        expect(timeOptions[2]).toHaveTextContent('13:00');
+        expect(timeOptions[3]).toHaveTextContent('14:00');
+    });
+});
+
+describe('BookingForm Component', () => {
+    beforeEach(() => {
+        jest.clearAllMocks(); // Clear mocks before each test
+    });
+
+    test('updates available times when a date is selected', () => {
+        const mockTimes = ['12:00', '13:00', '14:00'];
+        fetchAPI.mockReturnValue(mockTimes); // Mock the return value of fetchAPI
+
+        render(<BookingForm />);
+
+        const dateInput = screen.getByLabelText(/date/i);
+        fireEvent.change(dateInput, { target: { value: '2025-04-10' } });
+
+        expect(fetchAPI).toHaveBeenCalledWith(new Date('2025-04-10'));
+
+        const timeOptions = screen.getAllByRole('option');
+        expect(timeOptions).toHaveLength(4); // "Select a time" + 3 available times
+        expect(timeOptions[1]).toHaveTextContent('12:00');
+        expect(timeOptions[2]).toHaveTextContent('13:00');
+        expect(timeOptions[3]).toHaveTextContent('14:00');
+    });
+
+    test('submits the form successfully', () => {
+        submitAPI.mockReturnValue(true); // Mock successful form submission
+
+        render(<BookingForm />);
+
+        fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'John Doe' } });
+        fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'john@example.com' } });
+        fireEvent.change(screen.getByLabelText(/date/i), { target: { value: '2025-04-10' } });
+        fireEvent.change(screen.getByLabelText(/time/i), { target: { value: '12:00' } });
+        fireEvent.change(screen.getByLabelText(/guests/i), { target: { value: '2' } });
+        fireEvent.change(screen.getByLabelText(/occasion/i), { target: { value: 'Birthday' } });
+
+        fireEvent.click(screen.getByRole('button', { name: /book now/i }));
+
+        expect(submitAPI).toHaveBeenCalledWith({
+            name: 'John Doe',
+            email: 'john@example.com',
+            date: '2025-04-10',
+            time: '12:00',
+            guests: '2',
+            occasion: 'Birthday',
+        });
+
+        expect(screen.getByText(/booking confirmed/i)).toBeInTheDocument();
+    });
+
+    test('handles form submission failure', () => {
+        submitAPI.mockReturnValue(false); // Mock failed form submission
+
+        render(<BookingForm />);
+
+        fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'John Doe' } });
+        fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'john@example.com' } });
+        fireEvent.change(screen.getByLabelText(/date/i), { target: { value: '2025-04-10' } });
+        fireEvent.change(screen.getByLabelText(/time/i), { target: { value: '12:00' } });
+        fireEvent.change(screen.getByLabelText(/guests/i), { target: { value: '2' } });
+        fireEvent.change(screen.getByLabelText(/occasion/i), { target: { value: 'Birthday' } });
+
+        fireEvent.click(screen.getByRole('button', { name: /book now/i }));
+
+        expect(submitAPI).toHaveBeenCalled();
+        expect(screen.queryByText(/booking confirmed/i)).not.toBeInTheDocument();
+    });
 });
