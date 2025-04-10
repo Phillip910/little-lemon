@@ -72,5 +72,34 @@ section p {
     color: #666;
 }
 
+@media (max-width: 768px) {
+    body {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    main {
+        padding: 10px; /* Adjust main content padding */
+    }
+
+    img {
+        max-width: 100%; /* Ensure images scale properly */
+        height: auto; /* Maintain aspect ratio */
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px; /* Adjust font size for very small screens */
+    }
+
+    section h2 {
+        font-size: 1.5rem; /* Reduce heading size */
+    }
+
+    section p {
+        font-size: 0.9rem; /* Reduce paragraph size */
+    }
+}
+
 
 
